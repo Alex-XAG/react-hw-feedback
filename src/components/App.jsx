@@ -11,9 +11,8 @@ export class App extends React.Component {
   };
 
   countTotalFeedback = () => {
-    let total = 0;
-    total = this.state.good + this.state.neutral + this.state.bad;
-    return total;
+    // total = this.state.good + this.state.neutral + this.state.bad;
+    return Object.values(this.state).reduce((acc, value) => (acc += value), 0);
   };
 
   countPositiveFeedbackPercentage = () => {
@@ -40,7 +39,10 @@ export class App extends React.Component {
         }}
       >
         <Section title="Please live feedback">
-          <FeedbackOptions onLeaveFeedback={this.onLeaveFeedback} />
+          <FeedbackOptions
+            options={this.state}
+            onLeaveFeedback={this.onLeaveFeedback}
+          />
         </Section>
 
         <Section title="Statistics">

@@ -15,4 +15,5 @@ export const Button = styled.button`
   color: #ffffff;
   border: none;
   border-radius: 8px;
+  padding: 10px;
 `;
