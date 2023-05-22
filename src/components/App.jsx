@@ -1,6 +1,8 @@
 import React from 'react';
-import { FeedbackMarkup } from './FeedbackMarkup/FeedbackMarkup';
-
+import { Statistics } from 'components/Statistics/Statistics';
+import { Section } from 'components/Helpers/Section';
+import { Notification } from './Helpers/Notification';
+import { FeedbackOptions } from './FeedbackOptions/FeedbackOptions';
 export class App extends React.Component {
   state = {
     good: 0,
@@ -14,7 +16,11 @@ export class App extends React.Component {
     return total;
   };
 
-  handleClick = ({ target }) => {
+  countPositiveFeedbackPercentage = () => {
+    return Math.round((this.state.good / this.countTotalFeedback()) * 100);
+  };
+
+  onLeaveFeedback = ({ target }) => {
     this.setState(prevState => ({
       [target.name]: prevState[target.name] + 1,
     }));
@@ -26,19 +32,30 @@ export class App extends React.Component {
         style={{
           height: '100vh',
           display: 'flex',
+          flexDirection: 'column',
           justifyContent: 'center',
           alignItems: 'center',
           fontSize: 40,
           color: '#010101',
         }}
       >
-        <FeedbackMarkup
-          good={this.state.good}
-          neutral={this.state.neutral}
-          bad={this.state.bad}
-          countTotalFeedback={this.countTotalFeedback()}
-          handleClick={this.handleClick}
-        />
+        <Section title="Please live feedback">
+          <FeedbackOptions onLeaveFeedback={this.onLeaveFeedback} />
+        </Section>
+
+        <Section title="Statistics">
+          {isNaN(this.countPositiveFeedbackPercentage()) ? (
+            <Notification message="There is no feedback" />
+          ) : (
+            <Statistics
+              good={this.state.good}
+              neutral={this.state.neutral}
+              bad={this.state.bad}
+              total={this.countTotalFeedback()}
+              positivePercentage={this.countPositiveFeedbackPercentage()}
+            />
+          )}
+        </Section>
       </div>
     );
   }
