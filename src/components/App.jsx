@@ -9,16 +9,15 @@ export class App extends React.Component {
   };
 
   countTotalFeedback = () => {
-    this.props.total = this.props.total + 1;
+    let total = 0;
+    total = this.state.good + this.state.neutral + this.state.bad;
+    return total;
   };
 
   handleClick = ({ target }) => {
-    this.setState(
-      prevState => ({
-        [target.name]: prevState[target.name] + 1,
-      }),
-      this.countTotalFeedback
-    );
+    this.setState(prevState => ({
+      [target.name]: prevState[target.name] + 1,
+    }));
   };
 
   render() {
@@ -33,7 +32,13 @@ export class App extends React.Component {
           color: '#010101',
         }}
       >
-        <FeedbackMarkup total={0} />
+        <FeedbackMarkup
+          good={this.state.good}
+          neutral={this.state.neutral}
+          bad={this.state.bad}
+          countTotalFeedback={this.countTotalFeedback()}
+          handleClick={this.handleClick}
+        />
       </div>
     );
   }
